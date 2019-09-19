@@ -5,11 +5,12 @@ import InitialScreen from './views/initial';
 import HomeScreen from './views/home';
 import SideBar from './views/sideBar';
 import LoginScreen from './views/auth/login';
-import CustomersScreen from './views/customers'
+import CustomersScreen from './views/customers/customers'
 
 const Drawer = createDrawerNavigator(
   {
-    Home: {screen: HomeScreen}
+    Home: {screen: HomeScreen},
+    Customers: {screen: CustomersScreen},
   },
   {
     initialRouteName: 'Home',
@@ -23,6 +24,7 @@ const Drawer = createDrawerNavigator(
 const AppNavigator = createStackNavigator(
   {
     Initial: {screen: InitialScreen},
+    Login: {screen: LoginScreen},
     Drawer: {screen: Drawer},
   },
   {
