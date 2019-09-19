@@ -1,18 +1,28 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
   View,
   Text,
+  FlatList
 } from 'react-native';
+import { ListItem } from 'react-native-elements';
+import { logout } from '../actions/auth/login';
 
-const datas = [
+const data = [
   {
-    name: "Home",
+    name: "My Profile",
     route: "Home",
-    bg: "#C5F442"
+  },
+  {
+    name: "My Customers",
+    route: "Customers",
+  },
+  {
+    name: "Logout",
   },
 ]
 
-export default class SideBar extends Component {
+class SideBar extends Component {
   constructor(props) {
     super(props);
   }
@@ -21,11 +31,40 @@ export default class SideBar extends Component {
     console.log('updated')
   }
 
+  navigate(item) {
+    const {navigation} = this.props;
+    item.name == 'Logout' ? this.props.logout(navigation) : navigation.navigate(item.route);
+  }
+
+  renderListItem(item) {
+    return (
+      <ListItem 
+        containerStyle={{paddingLeft: 0}}
+        titleStyle={{fontSize: 22}}
+        title={item.name}
+        bottomDivider
+        onPress={() => this.navigate(item)}
+      />
+    )
+  }
+
+  renderFlatList() {
+    return (
+      <FlatList 
+        data={data}
+        renderItem={(item) => this.renderListItem(item.item)}
+        keyExtractor={(item, index) => index.toString()}
+      />
+    )
+  }
+
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: "#fff", top: -1 }}>
-        <Text>Side Bar</Text>
+      <View style={{ flex:7, justifyContent: 'center', backgroundColor: "#fff", top: -1 }}>
+        {this.renderFlatList()}
       </View>
     )
   }
 } 
+
+export default connect(null, { logout })(SideBar);

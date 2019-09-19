@@ -12,32 +12,32 @@ class InitialScreen extends Component {
         setToken,
         setUser
       } = this.props;
-      Storage.getToken()
-        .then(token => {
-          console.log(token, 'kkkk')
-          if (token) {
-            setAxiosHeader(token);
-            validateToken()
-              .then(response => {
-                console.log(response, 'responjse user');
-                // setUser(response.data.user);
-                // setToken(token);
-                resetNavigation(navigation, 'Drawer');
-              })
-              .catch(() => {
-                // setUser({})
-                removeAxiosHeader();
-                resetNavigation(navigation, 'Login');
-              })
-          } else {
-            console.log('empty')
-            resetNavigation(navigation, 'Login');            
-          }
-        })
-        .catch(() => {
-          resetNavigation(navigation, 'Login');          
-        })
-      // resetNavigation(navigation, 'Drawer');
+      // Storage.getToken()
+      //   .then(token => {
+      //     console.log(token, 'kkkk')
+      //     if (token) {
+      //       setAxiosHeader(token);
+      //       validateToken()
+      //         .then(response => {
+      //           console.log(response, 'responjse user');
+      //           // setUser(response.data.user);
+      //           // setToken(token);
+      //           resetNavigation(navigation, 'Drawer');
+      //         })
+      //         .catch(() => {
+      //           // setUser({})
+      //           removeAxiosHeader();
+      //           resetNavigation(navigation, 'Login');
+      //         })
+      //     } else {
+      //       console.log('empty')
+      //       resetNavigation(navigation, 'Login');            
+      //     }
+      //   })
+      //   .catch(() => {
+      //     resetNavigation(navigation, 'Login');          
+      //   })
+      resetNavigation(navigation, 'Drawer');
     }
 
     render() {
