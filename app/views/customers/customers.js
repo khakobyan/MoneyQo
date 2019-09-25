@@ -1,49 +1,39 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { connect } from 'react-redux';
+import { fetchCustomers, setCustomersLoading } from '../../actions'
+import colors from '../../utils/constants/colors';
 
 class CustomersScreen extends Component {
-    renderCustomerItem(item) {
-        return (
-            <TouchableOpacity  style={{...styles.groupContainerStyle, ...active}}>
-                <View key={item.index} style={styles.groupMain} >
-                    <TouchableOpacity style={{flex: 1, marginRight: '6%'}} >
-                        <View >
-                            <Avatar 
-                                rounded
-                                source={{
-                                    uri: getFullImageUrl(item.item.avatar_src)
-                                }}
-                                title={item.item.company_name.trim().substring(0,1)} 
-                                overlayContainerStyle={{backgroundColor: colors.sfBtnBackgroundGrey}}
-                            />
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{flex: 6, justifyContent: 'center'}}>
-                        <View style={{flexDirection: 'column', marginBottom: hasAddress ? 3 : 0}}>
-                            <Text numberOfLines={1} style={{color:colors.sfHeaderText,fontWeight:'bold',fontFamily:'OpenSans-Bold'}}>
-                                {item.item.company_name.trim()}
-                            </Text>
-                            {this.renderGroupAddress(item.item)}
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{flex: 1}} onPress={this.showSections(item)}>
+    componentDidMount() {
+        const {fetchCustomers} = this.props
+        fetchCustomers();
+        console.log(this.props, 'gfgfdgffgdgf')
+    }
 
-                        <View>
-                            <Icon 
-                                type='font-awesome' 
-                                color={colors.sfBtnBackgroundGrey} 
-                                name={'ellipsis-h'}
-                                size={15}
-                                reverse
-                            />
+    renderCustomerItem(item) {
+        console.log(item, 'jkkjkjkjkk')
+        return (
+            <TouchableOpacity  style={{...styles.groupContainerStyle}}>
+                <View key={item.index} style={styles.groupMain} >
+                        <View style={{flexDirection: 'column', alignItems: "center"}}>
+                            <Text numberOfLines={1} style={{color:colors.sfHeaderText, fontWeight:'bold', marginBottom: 10}}>
+                                {item.firstName} {item.lastName}
+                            </Text>
+                            <Text style={{alignSelf: 'stretch'}}>
+                                111111
+                            </Text>
                         </View>
-                    </TouchableOpacity>
+                        {/* <View>
+                            <Text>
+                                22222
+                            </Text>
+                        </View> */}
                 </View>
-                { selectedGroup.show && selectedGroup.index == item.index ? (
-                        this.renderGroupSections(item)
-                    ) : null
-                }
             </TouchableOpacity>   
+            // <View>
+            //     <Text>111</Text>
+            // </View>
         )
     }
 
@@ -54,8 +44,8 @@ class CustomersScreen extends Component {
             >
                 <FlatList
                     style={{flex: 1, padding: 10 }}
-                    renderItem={(item) => item.item.public_for_members ? this.renderGroup(item) : null}
-                    data={filteredGroups}
+                    renderItem={(item) => this.renderCustomerItem(item.item)}
+                    data={this.props.customers}
                     keyExtractor={(item, index) => index.toString()}
                 />
             </KeyboardAvoidingView>
@@ -63,6 +53,35 @@ class CustomersScreen extends Component {
     }
 }
 
+const styles = StyleSheet.create({
+    // groupMain: {
+    //     flexDirection: 'row',
+    //     justifyContent: 'center',
+    //     alignItems: 'center'
+    // },
+    groupContainerStyle: {
+        flex: 1,
+        // alignItems: 'center',
+        borderRadius: 10,
+        // height: 100,
+        borderWidth:2,
+        borderColor: colors.sfBlue,
+        padding: 20,
+        marginVertical: 5,
+        backgroundColor: colors.white
+    },
+});
 
+const mapStateToProps = state => {
+    console.log(state, 'state customers')
+    const { customers, loading } = state.customers;
+    return { customers, loading };
+};
 
-export default CustomersScreen;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchCustomers:() => dispatch(fetchCustomers())
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CustomersScreen);

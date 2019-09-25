@@ -38,24 +38,28 @@ export const loginIsLoading = (bool) => {
 export const login = (username, password, navigation = null) => (dispatch) => {
     dispatch(loginIsLoading(true));
     if (!username || !password) {
-        dispatch(loginHasError(true));
+        // dispatch(loginHasError(true));
         dispatch(loginIsLoading(false));
         return;
     }
-    api.post(LOGIN, {username, password})
+    console.log(`${LOGIN}?username=${username}&password=${password}`, 'llllkdsfjkdsfds')
+    // api.post(`${LOGIN}?username=${username}&password=${password}`)
+    api.post(`${LOGIN}?username=oren.duenies&password=helpmeplease`)
         .then(result => {
             if (result) {
                 console.log(result, 'login Result')
                 dispatch(loginHasError(false));
                 dispatch(isLogged(true));
-                const {token} = result.data;
-                Storage.setToken(token)
+                const {Payload} = result.data;
+                Storage.setToken(Payload)
                     .then(() => {
-                        setAxiosHeader(token);
+                        setAxiosHeader(Payload);
                         validateToken()
                         .then(() => {
                             // dispatch(setUser(response.data.user));
+                            console.log('rrrrrrrrrrrrrrrrrrrrrrrrrrr')
                             if(navigation){
+                                console.log('navvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv')
                                 resetNavigation(navigation, 'Initial');
                             }
                             dispatch(loginIsLoading(false));

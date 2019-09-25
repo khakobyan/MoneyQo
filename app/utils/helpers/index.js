@@ -11,18 +11,16 @@ export const resetNavigation = (navigation, route) => {
 };
 
 export const setAxiosHeader = (token) => {
-    console.log(token);
+    console.log(token, 'setAxiosHeader');
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    webApi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 };
 
 
 export const removeAxiosHeader = () => {
     api.defaults.headers.common['Authorization'] = null;
-    webApi.defaults.headers.common['Authorization'] = null;
 };
 
 export const validateToken = () => {
     //remember GET or POST
-    return api.get(VALIDATE_TOKEN);
+    return api.post(VALIDATE_TOKEN);
 };

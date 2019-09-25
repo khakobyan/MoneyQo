@@ -13,9 +13,9 @@ const Drawer = createDrawerNavigator(
     Customers: {screen: CustomersScreen},
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'Customers',
     contentOptions: {
-      activeTintColor: "#e91e63"
+      activeTintColor: "red"
     },
     contentComponent: SideBar,
   }
@@ -29,7 +29,7 @@ const AppNavigator = createStackNavigator(
   },
   {
     initialRouteName: 'Initial',
-    headerMode: 'none',
+    // headerMode: 'none',
   }
 );
 
