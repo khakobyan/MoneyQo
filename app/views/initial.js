@@ -2,14 +2,17 @@ import React, {Component} from 'react';
 import {View, Text} from 'react-native';
 import { connect } from 'react-redux';
 import Storage from '../services/Storage';
-import { setToken, setUser } from '../actions/user/user';
+import { setUser } from '../actions/auth/login';
 import {setAxiosHeader, removeAxiosHeader, validateToken, resetNavigation} from "../utils/helpers";
 
 class InitialScreen extends Component {
+    static navigationOptions = {
+      header: null
+    };
+
     componentDidMount() {
       const {
         navigation,
-        setToken,
         setUser
       } = this.props;
       // Storage.removeToken()
@@ -21,12 +24,13 @@ class InitialScreen extends Component {
             validateToken()
               .then(response => {
                 console.log(response, 'responjse user');
-                // setUser(response.data.user);
+                setUser(response.data);
+                resetNavigation(navigation, 'Drawer')
                 // setToken(token);
-                resetNavigation(navigation, 'Drawer');
               })
               .catch(() => {
                 // setUser({})
+                console.log('erorr44')
                 removeAxiosHeader();
                 resetNavigation(navigation, 'Login');
               })
@@ -36,6 +40,7 @@ class InitialScreen extends Component {
           }
         })
         .catch(() => {
+          console.log('erorr56')
           resetNavigation(navigation, 'Login');          
         })
       // resetNavigation(navigation, 'Drawer');
@@ -45,13 +50,12 @@ class InitialScreen extends Component {
       console.log('initial')
       return (
         <View>
-          <Text>Initial</Text> 
+          <Text></Text> 
         </View>
       );
     }
 }
 
 export default connect(null, {
-  setToken,
   setUser
 })(InitialScreen);

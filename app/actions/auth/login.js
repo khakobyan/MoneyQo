@@ -11,6 +11,7 @@ import {
     IS_LOGGED, 
     LOGIN_HAS_ERROR, 
     LOGIN_IS_LOADING,
+    SET_USER,
     LOGOUT
 } from '../../utils/constants/actionTypes';
 
@@ -35,16 +36,23 @@ export const loginIsLoading = (bool) => {
     }
 };
 
+export const setUser = (user) => {
+    console.log(user, 'de herioqaaaa')
+    return {
+        type: SET_USER,
+        payload: user
+    }
+};
+
 export const login = (username, password, navigation = null) => (dispatch) => {
     dispatch(loginIsLoading(true));
     if (!username || !password) {
-        // dispatch(loginHasError(true));
+        dispatch(loginHasError(true));
         dispatch(loginIsLoading(false));
         return;
     }
     console.log(`${LOGIN}?username=${username}&password=${password}`, 'llllkdsfjkdsfds')
-    // api.post(`${LOGIN}?username=${username}&password=${password}`)
-    api.post(`${LOGIN}?username=oren.duenies&password=helpmeplease`)
+    api.post(`${LOGIN}?username=${username}&password=${password}`)
         .then(result => {
             if (result) {
                 console.log(result, 'login Result')
@@ -55,18 +63,18 @@ export const login = (username, password, navigation = null) => (dispatch) => {
                     .then(() => {
                         setAxiosHeader(Payload);
                         validateToken()
-                        .then(() => {
-                            // dispatch(setUser(response.data.user));
-                            console.log('rrrrrrrrrrrrrrrrrrrrrrrrrrr')
+                        .then(response => {
+                            console.log(response, 'eeeeeeeeeee')
+                            dispatch(setUser(response.data));
                             if(navigation){
-                                console.log('navvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv')
                                 resetNavigation(navigation, 'Initial');
                             }
                             dispatch(loginIsLoading(false));
                         })
                         .catch((e) => {
-                            // setUser({});
+                            setUser({});
                             removeAxiosHeader();
+                            dispatch(loginIsLoading(false));
                             resetNavigation(navigation, 'Login');
                         });
                     });
@@ -75,6 +83,7 @@ export const login = (username, password, navigation = null) => (dispatch) => {
         .catch((e) => {
             console.log(e, 'error');
             dispatch(loginHasError(true));
+            dispatch(loginIsLoading(false));
         });
 };
 
@@ -92,5 +101,6 @@ export default {
     loginHasError,
     loginIsLoading,
     login,
+    setUser,
     logout
 }
